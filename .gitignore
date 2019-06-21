@@ -1,0 +1,26 @@
+#Ignore some files
+
+#Build reults
+[Dd]ebug/
+[Rr]ealse/
+[Xx]64/
+[Xx]86/
+[Bb]in/
+[Oo]bj/
+
+.vs/
+
+*.obj
+*.pdb
+*.pgb
+*.log
+*.tmp
+*.
+*.obj
+*.obj
+*.obj
+*.obj
+*.obj
+*.obj
+
+
