@@ -5,6 +5,7 @@
         private static System.ConsoleColor default_back = System.Console.BackgroundColor;
 
         //FILE_MANAGER
+        private static string exe_path;
         private static bool file_manager_run;
         private static int file_manager_element_index;
         private static int file_manager_elements_count;
@@ -66,6 +67,7 @@
         {
             System.Console.Title = "Commander v0.1";
             System.Console.WriteLine("Aplication started!");
+            exe_path = System.IO.Directory.GetCurrentDirectory();
             file_manager_current_directory = System.IO.Directory.GetCurrentDirectory();
             file_manager_data_directory = file_manager_current_directory + "/Data";
 
@@ -311,13 +313,18 @@
                                 file_manager_element_index -
                                 file_manager_current_directories.Length];
             string file_extenssion;
+
             if (file_path.Contains("."))
             {
-                file_extenssion = file_path.Split('.')[1];
+                string[] all_extensions = file_path.Split('.');
+                file_extenssion = 
+                    all_extensions.Length > 1 ? 
+                    all_extensions[all_extensions.Length-1] : 
+                    all_extensions[1];
             }
             else
             {
-                file_extenssion = ".txt";
+                file_extenssion = "txt";
             }
 
             bool Run = true;
@@ -348,6 +355,14 @@
                         break;
                     case System.ConsoleKey.Enter:
                         {
+                            /*
+
+                            #########################################################
+                            ### На данный момент мы запускаемся в текущем потоке, ###
+                            ### нужно создавать отдельный процесс под приложения  ###                         
+                            #########################################################                           
+
+                            */
                             Run = false;
                             switch (context_menu_current_option)
                             {
@@ -358,19 +373,29 @@
                                         {
                                             case "txt":
                                             case "sh":
+                                            case "c":
+                                            case "cpp":
+                                            case "lua":
+                                            case "python":
+                                            case "cs":
+                                            case "java":
+                                            case "pdb":
+                                            case "gitignore":
+                                            case "md":
+                                            case "cache":
                                                 {
-                                                    System.Diagnostics.Process.Start("gedit " + file_path);
+                                                    System.Diagnostics.Process
+                                                    .Start(
+                                                        exe_path +
+                                                        "/scripts/text_editor_script", file_path);
                                                 }
                                                 break;
                                             case "exe":
                                                 {
                                                     System.Diagnostics.Process
-                                                    .Start("/home/bies/" +
-                                                    	"Документы/Programming/" +
-                                                    	"CSharp/Console/ConsoleFileManager/" +
-                                                    	"ConsoleFileManager/bin/Debug/" +
-                                                    	"scripts/mono_run_script", 
-                                                    file_path);
+                                                    .Start(
+                                                        exe_path +
+                                                    	    "/scripts/mono_run_script", file_path);
                                                     System.Console.WriteLine("Started: ", file_path);
                                                     System.Console.Read();
                                                 }
@@ -379,8 +404,22 @@
                                                 {
                                                 }
                                                 break;
-                                            case "blabla":
+                                            case "sln":
                                                 {
+                                                    System.Diagnostics.Process
+                                                   .Start(
+                                                       exe_path +
+                                                           "/scripts/monodevelop_run_script", file_path);
+                                                }
+                                                break;
+                                            case "mkv":
+                                                {
+                                                    var proc_info = new System.Diagnostics.ProcessStartInfo();
+                                                    proc_info.FileName = 
+                                                        exe_path + "/scripts/mpv_script";
+                                                    proc_info.Arguments = file_path;
+                                                    System.Diagnostics.Process
+                                                   .Start(proc_info);
                                                 }
                                                 break;
                                         }
